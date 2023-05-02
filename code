@@ -4,14 +4,136 @@ import re
 from selenium import webdriver
 import phonenumbers
 from phonenumbers import geocoder, carrier
+import dns
+import dns.resolver
+import time
+import pyfiglet
+
+
+def file_print(material):
+    m=input("print in \n1.output.txt \n2.other.txt\n")
+    if m=="1":
+        with open('output.txt','a')as f:
+            f.write(material)
+            f.close()
+            return
+    elif m=="2":
+        n=input("enter file name ")
+        with open(n,'a')as f:
+            f.write(material)
+            f.close()
+            return
+
+
+def search_nd_mod():
+    word_to_search = input("enter your word to search:")
+    file_path = input("enter name of ur file:")
+    with open(file_path, "r") as file:
+        line_number = 0
+        occurrences = 0
+        for line in file:
+            line_number += 1
+            if re.search(r"\b" + word_to_search + r"\b", line):
+                print(f'\033[91m',"Word '{word_to_search}' found in line {line_number}:")
+            print(line)
+            occurrences += 1
+        if occurrences == 0:
+            print(f'\033[91m',"Word '{word_to_search}' was not found in the file.")
+        else:
+            print(f'\033[91m',"Total occurrences: {occurrences}")
+
+
+
+def replace():
+    word_to_search = input("enter ur word to search:")
+    word_to_replace = input("enter ur word to replace:")
+    file_path = input("enter ur file or filepath:")
+
+# Read the file contents
+    with open(file_path, "r") as file:
+        file_contents = file.readlines()
+
+# Perform word replacement and count the total number of replacements made
+    total_replacements = 0
+    for i, line in enumerate(file_contents):
+        if word_to_search in line:
+            updated_line = line.replace(word_to_search, word_to_replace)
+            file_contents[i] = updated_line
+            total_replacements += line.count(word_to_search)
+            print(f'\033[91m',"Line {i+1}:")
+            print('\033[92m',"Original:", line.strip())
+            print('\033[91m',"Updated :", updated_line.strip())
+
+# Write the modified contents back to the file
+    with open(file_path, "w") as file:
+        file.writelines(file_contents)
+
+    print(f'\033[91m',"Total replacements made: {total_replacements}")
+        
+
+def outer_func(colour):
+    def inner_function(msg):
+        print(f'{colour}{msg}')
+        return inner_function
+
+GREEN = outer_func('\033[92m')
+YELLOW = outer_func('\033[93m')
+RED = outer_func('\033[91m')
+
+
 
 print("Welcome to webin \n")
-print("ENSANITY_el \n")
-url_reciever = input("enter ur url \n")
+
+ascii_banner = pyfiglet.figlet_format("WEBIN!!")
+print(ascii_banner)
+
+
+print("\033[91m{+} built by Sabyasachi dutta v1.4.3\n")
+url_reciever = input("\033[92menter ur url \n")
 page = requests.get(url_reciever)
 soup = BeautifulSoup(page.content, "html.parser")
 titl = soup.titl
 para = soup.find_all('p')
+
+def domain():
+
+    def dom():
+        lastchar = (url_reciever[:-1])
+        httpsremover= (lastchar[8:])
+        finalchar=httpsremover
+        result = dns.resolver.query(finalchar, 'A')
+        for ipval in result:
+            print('\033[91m','IP', ipval.to_text())
+
+    def soa():
+        lastchar = (url_reciever[:-1])
+        httpsremover= (lastchar[8:])
+        finalchar=httpsremover
+        answers = dns.resolver.query(finalchar, 'SOA')
+        print ('query qname:', answers.qname, ' num ans.', len(answers))
+        for rdata in answers:
+            print ('\033[91m',' serial: %s  tech: %s' % (rdata.serial, rdata.rname))
+            print ('\033[91m',' refresh: %s  retry: %s' % (rdata.refresh, rdata.retry))
+            print ('\033[91m',' expire: %s  minimum: %s' % (rdata.expire, rdata.minimum))
+            print ('\033[91m',' mname: %s' % (rdata.mname))
+
+        
+    print("Domain choice: \nenter ur choice")
+    print("1.Domain")
+    print("2.SOA")
+    while True:
+        choices = input("enter ur choice 1/2 \n")
+        if choices in ('1', '2', '3'):
+            if choices == '1':
+                dom()
+                break
+            if choices == '2':
+                soa()
+                break
+            if choice > '2':
+                print("wrong choice")
+                break
+           
 
 
 def https():
@@ -22,19 +144,109 @@ def https():
         if (link.get('href') != "#"):
             link = url_reciever + link.get('href')
             all_links.add(link)
-            print(link)
+
+            m=input("Do u want it to be printed on external file Y/N ")
+            if m=="y":
+                file_print(link)
+            elif m=="n":
+                print('\033[91m',link)
+            break
+
 
 
 def contentpage():
-    print(soup.find('p'))
-    print(soup.find('p')['class'])
-    print(soup.find_all("p", class_="lead"))
-    print(soup.find('p').get_text())  # text from tags
-    print(soup.get_text())
+    #required for all
+    soup2=BeautifulSoup(page.text,'html.parser')
+
+    def head():
+        head_element=soup2.findAll('head')
+        for title in head_element:
+            m=input("Do u want it to be printed on external file Y/N ")
+            if m=="y":
+                file_print(title.text)
+            elif m=="n":
+                print('\033[91m',title.text)
+            break
+
+    def titles():
+        
+        title_element=soup2.findAll(['h1','h2','h3','h4','h5'])
+        for title in title_element:
+            m=input("Do u want it to be printed on external file Y/N ")
+            if m=="y":
+                file_print(title.text)
+            elif m=="n":
+                print('\033[91m',title.text)
+            break
+
+    def span():
+        para_element=soup2.findAll(['p','span'])
+        for title in para_element:
+            m=input("Do u want it to be printed on external file Y/N ")
+            if m=="y":
+                file_print(title.text)
+            elif m=="n":
+                print('\033[91m',title.text)
+            break
+    
+    def anchor():
+        a_element=soup2.findAll(['a'])
+        for title in a_element:
+            m=input("Do u want it to be printed on external file Y/N ")
+            if m=="y":
+                file_print(title.text)
+            elif m=="n":
+                print('\033[91m',title.text)
+            break
+    
+    def specific():  
+        class_name=input("Enter your class name:")
+        element=soup.find(class_=class_name)
+        if element:
+            m=input("Do u want it to be printed on external file Y/N ")
+            if m=="y":
+                text_content=element.get_text().replace(".","\n")
+                file_print(text_content)
+            elif m=="n":
+                print('\033[91m',element.get_text())
+        else:
+            print("class not found")
+
+
+
+
+    print("Contentpage choice:\n enter ur choice")
+    print("1.print head sources and metadata")
+    print("2.print titles with h(1-5) element")
+    print("3.print p OR span element")
+    print("4.print anchor tags")
+    print("5.class specific tags and documents")
+    while True:
+        choices=input("enter ur choice 1/2/3/4/5 \n ")
+        if choices in ('1', '2', '3','4','5'):
+            if choices == '1':
+                head()
+                break
+            if choices == '2':
+                titles()
+                break
+            if choices == '3':
+                span()
+                break
+            if choices == '4':
+                anchor()
+                break
+            if choices == '5':
+                specific()
+                break
+            if choice >'5':
+                print("wrong choice")
+                break
+
 
 
 def parentchild():
-    wordid = input("enter ur word search id")
+    wordid = input("enter ur word search id ")
     wordsearch = soup.find(id=wordid)
     store = wordsearch.parent
     store2 = wordsearch.next_sibling
@@ -44,14 +256,37 @@ def parentchild():
     print("2.next_sibling")
     print("3.previous_sibling")
     while True:
-        choices = input("enter ur choice 1/2/3 \n")
+        choices = input("Parentchild choice:\nenter ur choice 1/2/3 \n")
         if choices in ('1', '2', '3'):
+
             if choices == '1':
-                print(store.prettify())
+                m=input("Do u want it to be printed on external file Y/N ")
+                if m=="y":
+                    file_print(store.prettify())
+                elif m=="n":
+                    print('\033[91m',store.prettify())
+                break
+
             if choices == '2':
-                print(store2.prettify())
+                m=input("Do u want it to be printed on external file Y/N ")
+                if m=="y":
+                    file_print(store2.prettify())
+                elif m=="n":
+                    print('\033[91m',store2.prettify())
+                break
+                
             if choices == '3':
-                print(store3.prettify())
+                m=input("Do u want it to be printed on external file Y/N ")
+                if m=="y":
+                    file_print(store3.prettify())
+                elif m=="n":
+                    print('\033[91m',store3.prettify())
+                break
+
+            if choice > '3':
+                print("wrong choice")
+                break
+
 
 
 def phnum():
@@ -59,24 +294,412 @@ def phnum():
     phoneNumber = phonenumbers.parse(newnum)
     Carrier = carrier.name_for_number(phoneNumber, 'en')
     Region = geocoder.description_for_number(phoneNumber, 'en')
-    print(Carrier)
-    print(Region)
+    print('\033[91m',Carrier)
+    print('\033[91m',Region)
 
 
+
+def social_status():
+    username = input('\033[92m{+} Enter username to DOX: ')
+    
+    # INSTAGRAM
+    instagram = f'https://www.instagram.com/{username}'
+    # FACEBOOK
+    facebook = f'https://www.facebook.com/{username}'
+    #TWITTER
+    twitter = f'https://www.twitter.com/{username}'
+    # YOUTUBE
+    youtube = f'https://www.youtube.com/{username}'
+    # BLOGGER
+    blogger = f'https://{username}.blogspot.com'
+    # GOOGLE+
+    google_plus = f'https://plus.google.com/s/{username}/top'
+    # REDDIT
+    reddit = f'https://www.reddit.com/user/{username}'
+    # GITHUB
+    github = f'https://www.github.com/{username}'
+    
+    
+    WEBSITES = [instagram, facebook, twitter, youtube, blogger, google_plus, reddit,github]
+
+    def outer_func(colour):
+        def inner_function(msg):
+            print(f'{colour}{msg}')
+        return inner_function
+
+
+    ''' COLOUR PRINTS '''
+    GREEN = outer_func('\033[92m')
+    YELLOW = outer_func('\033[93m')
+    RED = outer_func('\033[91m')
+
+    def search():
+        GREEN(f'[+] Searching for username:{username}')
+        time.sleep(0.5)
+        print('.......')
+        time.sleep(0.5)
+        print('.......\n')
+        time.sleep(0.5)
+
+    GREEN(f'[+] webin 1.4.3 is working\n')
+    time.sleep(0.5)
+    print('.......')
+    time.sleep(0.5)
+    print('.......\n')
+    time.sleep(0.5)
+
+    time.sleep(1)
+
+    count = 0
+    match = True
+    for url in WEBSITES:
+        r = requests.get(url)
+
+        if r.status_code == 200:
+            if match == True:
+                GREEN('[+] FOUND MATCHES')
+                match = False
+            YELLOW(f'\n{url} - {r.status_code} - OK')
+        if username in r.text:
+                GREEN(f'POSITIVE MATCH: Username:{username} - text has been detected in url.')
+        else:
+                GREEN(f'POSITIVE MATCH: Username:{username} - \033[91mtext has NOT been detected in url, could be a FALSE POSITIVE.')#
+        count += 1
+
+    total =  len(WEBSITES)
+    GREEN(f'FINISHED: A total of {count} MATCHES found out of {total} websites.')
+
+
+
+#def sublinks():
+    # Define the predefined blocks as lists of words
+    block1 = ["photos","videos","pictures","links","sublinks","documents","files"]
+    block2 = ["admin","user","sysadmin","root"]
+    block3 = ["login","logout","signin","new"]
+    # Function to process the chosen block
+    def process_block(chosen_block):
+        print("Processing the chosen block...")
+        for word in chosen_block:
+            print("Processing word:", word)
+        print("Finished processing the chosen block.")
+
+    def links(chosen_block):
+        print("words from choosen block")
+        for word in chosen_block:
+            username=word
+        
+            instagram = f'https://www.instagram.com/{username}'
+            facebook = f'https://www.facebook.com/{username}'
+            twitter = f'https://www.twitter.com/{username}'
+            youtube = f'https://www.youtube.com/{username}'
+            blogger = f'https://{username}.blogspot.com'
+            google_plus = f'https://plus.google.com/s/{username}/top'
+            reddit = f'https://www.reddit.com/user/{username}'
+            wordpress = f'https://{username}.wordpress.com'
+            pinterest = f'https://www.pinterest.com/{username}'
+            github = f'https://www.github.com/{username}'
+
+            WEBSITES = [instagram, facebook, twitter, youtube, blogger, google_plus, reddit,wordpress, pinterest, github]
+
+            def outer_func(colour):
+                def inner_function(msg):
+                   print(f'{colour}{msg}')
+                return inner_function
+
+            GREEN = outer_func('\033[92m')
+            YELLOW = outer_func('\033[93m')
+            RED = outer_func('\033[91m')
+
+             
+
+            def search():
+                GREEN(f'[+] Searching for username:{username}')
+                time.sleep(0.5)
+                print('.......')
+                time.sleep(0.5)
+                print('.......\n')
+                time.sleep(0.5)
+
+                GREEN(f'[+] Webin 1.4.3 is working\n')
+                time.sleep(0.5)
+                print('.......')
+                time.sleep(0.5)
+                print('.......\n')
+                time.sleep(0.5)
+
+                time.sleep(1) 
+
+
+                count = 0
+                match = True
+                for url in WEBSITES:
+                    r = requests.get(url)
+
+
+                
+                if r.status_code == 200:
+                    if match == True:
+                        GREEN('[+] FOUND MATCHES')
+                        match = False
+                    YELLOW(f'\n{url} - {r.status_code} - OK')
+                    if username in r.text:
+                       GREEN(f'POSITIVE MATCH: Username:{username} - text has been detected in url.')
+                    else:
+                        GREEN(f'POSITIVE MATCH: Username:{username} - \033[91mtext has NOT been detected in url, could be a FALSE POSITIVE.')#
+                    count += 1
+
+                
+                total = len(WEBSITES)
+                GREEN(f'FINISHED: A total of {count} MATCHES found out of {total} websites.')
+
+
+            search()
+        
+        print("finished printing")
+
+    # Display the available blocks to the user
+    print("Available Blocks:")
+    print("1. Block 1: " + " ".join(block1))
+    print("2. Block 2: " + " ".join(block2))
+    print("3. Block 3: " + " ".join(block3))
+
+
+    # Accept user input for choosing a block
+    block_choice = input("Enter the number of the block you want to choose (1/2/3): ")
+
+ 
+    # Validate the block choice
+    if block_choice == "1":
+        chosen_block = block1
+    elif block_choice == "2":
+        chosen_block = block2
+    elif block_choice == "3":
+        chosen_block = block3
+    else:
+       print("Invalid block choice. Exiting...")
+
+    # Call the function to process the chosen block
+    
+    process_block(chosen_block)
+
+    links(chosen_block)
+    
+
+
+def sublinks():
+    def create_words_dict():
+            choice = input("enter ur choice \n1.Basic\n2.Admin loopholes\n3.Sign in pages\n4.User defined\nYour choice: ")
+
+            if choice == '1':
+                words_dict = {"photos": None, "videos": None,"pictures": None, "files": None}
+            elif choice == '2':
+                words_dict = {"admin": None, "user": None,"sysadmin": None, "root": None}
+            elif choice == '3':
+                words_dict = {"login": None, "logout": None,"signin": None, "new": None}
+            elif choice == '4':
+                words_dict = {}
+                num_words = int(input("Enter the number of words you will input: "))  
+            for i in range(num_words):
+                input_string = input("Enter word #{}: ".format(i + 1))  
+                words_dict[input_string] = None  
+            else:
+                print("Invalid choice. Using predefined words by default.")
+            return words_dict,choice  # Returning the created dictionary
+
+    def links1(words_dict):
+        print("\033[92m[+]checking ur words as sublinks on major sites...")
+        for word in words_dict:
+            username=word
+            instagram = f'https://www.instagram.com/{username}'
+            facebook = f'https://www.facebook.com/{username}'
+            twitter = f'https://www.twitter.com/{username}'
+            youtube = f'https://www.youtube.com/{username}'
+            blogger = f'https://{username}.blogspot.com'
+            google_plus = f'https://plus.google.com/s/{username}/top'
+            reddit = f'https://www.reddit.com/user/{username}'
+            wordpress = f'https://{username}.wordpress.com'
+            pinterest = f'https://www.pinterest.com/{username}'
+            github = f'https://www.github.com/{username}'
+
+            WEBSITES = [instagram, facebook, twitter, youtube, blogger, google_plus, reddit,wordpress, pinterest, github]
+
+            def outer_func(colour):
+                def inner_function(msg):
+                    print(f'{colour}{msg}')
+                return inner_function
+
+
+            GREEN = outer_func('\033[92m')
+            YELLOW = outer_func('\033[93m')
+            RED = outer_func('\033[91m')
+
+            def search():
+                GREEN(f'[+] Searching for sublink:{username}')
+                time.sleep(0.5)
+                print('.......')
+                time.sleep(0.5)
+                print('.......\n')
+                time.sleep(0.5)
+
+                GREEN(f'[+] Webin 1.4.3 is working\n')
+                time.sleep(0.5)
+                print('.......')
+                time.sleep(0.5)
+                print('.......\n')
+                time.sleep(0.5)
+
+                time.sleep(1) 
+
+                count = 0
+                match = True
+                for url in WEBSITES:
+                    r = requests.get(url)
+
+                if r.status_code == 200:
+                    if match == True:
+                        GREEN('[+] FOUND MATCHES')
+                        match = False
+                    YELLOW(f'\n{url} - {r.status_code} - OK')
+                    if username in r.text:
+                        GREEN(f'POSITIVE MATCH: Username:{username} - text has been detected in url.')
+                    else:
+                        GREEN(f'POSITIVE MATCH: Username:{username} - \033[91mtext has NOT been detected in url, could be a FALSE POSITIVE.')#
+                    count += 1
+
+                total = len(WEBSITES)
+                GREEN(f'FINISHED: A total of {count} MATCHES found out of {total} websites.')
+
+            search()
+
+
+        print("finished printing")
+
+    def links2(words_dict,y):
+        print("\033[92m[+}Ur website is:"+y)
+        for word in words_dict:
+            username=word
+            mod_web = f'https://{y}/{username}'
+            WEBSITES = [mod_web]
+            def outer_func(colour):
+                def inner_function(msg):
+                    print(f'{colour}{msg}')
+                return inner_function
+
+
+            GREEN = outer_func('\033[92m')
+            YELLOW = outer_func('\033[93m')
+            RED = outer_func('\033[91m')
+
+            def search():
+                GREEN(f'[+] Searching for sublink:{username}')
+                time.sleep(0.5)
+                print('.......')
+                time.sleep(0.5)
+                print('.......\n')
+                time.sleep(0.5)
+
+                GREEN(f'[+] Webin 1.4.3 is working\n')
+                time.sleep(0.5)
+                print('.......')
+                time.sleep(0.5)
+                print('.......\n')
+                time.sleep(0.5)
+
+                time.sleep(1) 
+
+                count = 0
+                match = True
+                for url in WEBSITES:
+                    r = requests.get(url)
+
+                if r.status_code == 200:
+                    if match == True:
+                        GREEN('[+] FOUND MATCHES')
+                        match = False
+                    YELLOW(f'\n{url} - {r.status_code} - OK')
+                    if username in r.text:
+                        GREEN(f'POSITIVE MATCH: Username:{username} - text has been detected in url.')
+                    else:
+                        GREEN(f'POSITIVE MATCH: Username:{username} - \033[91mtext has NOT been detected in url, could be a FALSE POSITIVE.')#
+                    count += 1
+
+                total = len(WEBSITES)
+                GREEN(f'FINISHED: A total of {count} MATCHES found out of {total} websites.')
+
+            search()
+
+
+        print("finished printing")
+
+    def main():
+     # Call the create_words_dict() function to create the dictionary of words
+        words_dict,choice = create_words_dict()
+    
+     # Print the words (keys) without None values
+        print("Block"+ choice+":", list(words_dict.keys()))
+        x=input("do want it for major websites or user based websites\n1.Major\n2.user based\nUr choice:")
+        if x=='1':
+            links1(words_dict)
+        elif x=='2':
+            y=input("enter ur website\n")
+            links2(words_dict,y)
+        else:
+            print("wrong input")
+
+    if __name__ == "__main__":
+         main()
+
+
+ 
 print("select operations")
-print("1.https")
-print("2.contentpage")
-print("3.parentchild")
-print("4.phone number")
+print("\033[93m1.\033[92m  HTTPS")
+print("\033[93m2.\033[92m  Contentpage")
+print("\033[93m3.\033[92m  Parentchild")
+print("\033[93m4.\033[92m  Phone number")
+print("\033[93m5.\033[92m  Domain")
+print("\033[93m6.\033[92m  Social_status")
+print("\033[93m7.\033[92m  Search_nd_mod")
+print("\033[93m8.\033[92m  Replace")
+print("\033[93m9.\033[92m  Sublinks")
+
+
+
 
 while True:
-    choice = input("enter your choice(1/2/3/4) \n")
-    if choice in ('1', '2', '3', '4'):
+    choice = input("\033[92mMain choice:\nenter your choice \033[93m (1/2/3/4/5/6/7/8/9) \n")
+    if choice in ('1', '2', '3', '4','5','6','7','8','9'):
         if choice == '1':
-            https()
+            try:
+              https()
+            except Exception as e:
+                print("An error occured",e)
         if choice == '2':
-            contentpage()
+            try:
+                contentpage()
+            except Exception as e:
+               print("An error occured try adding a customized class",e)
         if choice == '3':
-            parentchild()
+            try:
+              parentchild()
+            except Exception as e:
+                print("An error occured",e)
         if choice == '4':
-            phnum()
+            try:
+              phnum()
+            except Exception as e:
+                print("An error occured",e)
+        if choice =='5':
+            domain()
+        if choice == '6':
+            social_status()
+        if choice == '7':
+            search_nd_mod()
+        if choice =='8':
+            replace()
+        if choice =='9':
+            sublinks()   
+        if  choice > '9':
+            print("wrong choice")
+            
+            
+            
