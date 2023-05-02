@@ -14,13 +14,13 @@ def file_print(material):
     m=input("print in \n1.output.txt \n2.other.txt\n")
     if m=="1":
         with open('output.txt','a')as f:
-            f.write(material)
+            f.write(str(material))
             f.close()
             return
     elif m=="2":
         n=input("enter file name ")
         with open(n,'a')as f:
-            f.write(material)
+            f.write(str(material))
             f.close()
             return
 
@@ -154,6 +154,18 @@ def https():
 
 
 
+def classes_():
+    p_classes=set()
+    for p_element in soup.find_all(class_=True):
+        if p_element.find("p"):
+            p_classes.update(p_element["class"])
+            
+            with open ("classes.txt",'w')as f:
+               f.write("\n".join(p_classes))
+               print("All classes printed on classes.txt")
+               continue
+
+
 def contentpage():
     #required for all
     soup2=BeautifulSoup(page.text,'html.parser')
@@ -200,17 +212,15 @@ def contentpage():
             break
     
     def specific():  
-        class_name=input("Enter your class name:")
-        element=soup.find(class_=class_name)
-        if element:
-            m=input("Do u want it to be printed on external file Y/N ")
-            if m=="y":
-                text_content=element.get_text().replace(".","\n")
-                file_print(text_content)
-            elif m=="n":
-                print('\033[91m',element.get_text())
-        else:
-            print("class not found")
+       class_name=input("enter ur class name")
+       p_elements=soup.find_all(class_=class_name)[0].find_all("p")
+       m=input("enter the name of ur file")
+       with open(m,"w")as f:
+           for p in p_elements:
+               f.write(p.text+"\n")
+           else:
+               print("reqst failed")
+        
 
 
 
@@ -369,120 +379,8 @@ def social_status():
     total =  len(WEBSITES)
     GREEN(f'FINISHED: A total of {count} MATCHES found out of {total} websites.')
 
+2
 
-
-#def sublinks():
-    # Define the predefined blocks as lists of words
-    block1 = ["photos","videos","pictures","links","sublinks","documents","files"]
-    block2 = ["admin","user","sysadmin","root"]
-    block3 = ["login","logout","signin","new"]
-    # Function to process the chosen block
-    def process_block(chosen_block):
-        print("Processing the chosen block...")
-        for word in chosen_block:
-            print("Processing word:", word)
-        print("Finished processing the chosen block.")
-
-    def links(chosen_block):
-        print("words from choosen block")
-        for word in chosen_block:
-            username=word
-        
-            instagram = f'https://www.instagram.com/{username}'
-            facebook = f'https://www.facebook.com/{username}'
-            twitter = f'https://www.twitter.com/{username}'
-            youtube = f'https://www.youtube.com/{username}'
-            blogger = f'https://{username}.blogspot.com'
-            google_plus = f'https://plus.google.com/s/{username}/top'
-            reddit = f'https://www.reddit.com/user/{username}'
-            wordpress = f'https://{username}.wordpress.com'
-            pinterest = f'https://www.pinterest.com/{username}'
-            github = f'https://www.github.com/{username}'
-
-            WEBSITES = [instagram, facebook, twitter, youtube, blogger, google_plus, reddit,wordpress, pinterest, github]
-
-            def outer_func(colour):
-                def inner_function(msg):
-                   print(f'{colour}{msg}')
-                return inner_function
-
-            GREEN = outer_func('\033[92m')
-            YELLOW = outer_func('\033[93m')
-            RED = outer_func('\033[91m')
-
-             
-
-            def search():
-                GREEN(f'[+] Searching for username:{username}')
-                time.sleep(0.5)
-                print('.......')
-                time.sleep(0.5)
-                print('.......\n')
-                time.sleep(0.5)
-
-                GREEN(f'[+] Webin 1.4.3 is working\n')
-                time.sleep(0.5)
-                print('.......')
-                time.sleep(0.5)
-                print('.......\n')
-                time.sleep(0.5)
-
-                time.sleep(1) 
-
-
-                count = 0
-                match = True
-                for url in WEBSITES:
-                    r = requests.get(url)
-
-
-                
-                if r.status_code == 200:
-                    if match == True:
-                        GREEN('[+] FOUND MATCHES')
-                        match = False
-                    YELLOW(f'\n{url} - {r.status_code} - OK')
-                    if username in r.text:
-                       GREEN(f'POSITIVE MATCH: Username:{username} - text has been detected in url.')
-                    else:
-                        GREEN(f'POSITIVE MATCH: Username:{username} - \033[91mtext has NOT been detected in url, could be a FALSE POSITIVE.')#
-                    count += 1
-
-                
-                total = len(WEBSITES)
-                GREEN(f'FINISHED: A total of {count} MATCHES found out of {total} websites.')
-
-
-            search()
-        
-        print("finished printing")
-
-    # Display the available blocks to the user
-    print("Available Blocks:")
-    print("1. Block 1: " + " ".join(block1))
-    print("2. Block 2: " + " ".join(block2))
-    print("3. Block 3: " + " ".join(block3))
-
-
-    # Accept user input for choosing a block
-    block_choice = input("Enter the number of the block you want to choose (1/2/3): ")
-
- 
-    # Validate the block choice
-    if block_choice == "1":
-        chosen_block = block1
-    elif block_choice == "2":
-        chosen_block = block2
-    elif block_choice == "3":
-        chosen_block = block3
-    else:
-       print("Invalid block choice. Exiting...")
-
-    # Call the function to process the chosen block
-    
-    process_block(chosen_block)
-
-    links(chosen_block)
     
 
 
@@ -653,50 +551,53 @@ def sublinks():
  
 print("select operations")
 print("\033[93m1.\033[92m  HTTPS")
-print("\033[93m2.\033[92m  Contentpage")
-print("\033[93m3.\033[92m  Parentchild")
-print("\033[93m4.\033[92m  Phone number")
-print("\033[93m5.\033[92m  Domain")
-print("\033[93m6.\033[92m  Social_status")
-print("\033[93m7.\033[92m  Search_nd_mod")
-print("\033[93m8.\033[92m  Replace")
-print("\033[93m9.\033[92m  Sublinks")
+print("\033[93m2.\033[92m  CLASS")
+print("\033[93m3.\033[92m  Contentpage")
+print("\033[93m4.\033[92m  Parentchild")
+print("\033[93m5.\033[92m  Phone number")
+print("\033[93m6.\033[92m  Domain")
+print("\033[93m7.\033[92m  Social_status")
+print("\033[93m8.\033[92m  Search_nd_mod")
+print("\033[93m9.\033[92m  Replace")
+print("\033[93m10.\033[92m  Sublinks")
 
 
 
 
 while True:
-    choice = input("\033[92mMain choice:\nenter your choice \033[93m (1/2/3/4/5/6/7/8/9) \n")
-    if choice in ('1', '2', '3', '4','5','6','7','8','9'):
+    choice = input("\033[92mMain choice:\nenter your choice \033[93m (1/2/3/4/5/6/7/8/9/10) \n")
+    if choice in ('1', '2', '3', '4','5','6','7','8','9','10'):
         if choice == '1':
             try:
               https()
             except Exception as e:
                 print("An error occured",e)
         if choice == '2':
+            classes_()        
+        if choice == '3':
             try:
                 contentpage()
             except Exception as e:
                print("An error occured try adding a customized class",e)
-        if choice == '3':
+        if choice == '4':
             try:
               parentchild()
             except Exception as e:
                 print("An error occured",e)
-        if choice == '4':
+        if choice == '5':
             try:
               phnum()
             except Exception as e:
                 print("An error occured",e)
-        if choice =='5':
+        if choice =='6':
             domain()
-        if choice == '6':
-            social_status()
         if choice == '7':
+            social_status()
+        if choice == '8':
             search_nd_mod()
-        if choice =='8':
-            replace()
         if choice =='9':
+            replace()
+        if choice =='10':
             sublinks()   
         if  choice > '9':
             print("wrong choice")
