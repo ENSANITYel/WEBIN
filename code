@@ -385,167 +385,172 @@ def social_status():
 
 
 def sublinks():
-    def create_words_dict():
-            choice = input("enter ur choice \n1.Basic\n2.Admin loopholes\n3.Sign in pages\n4.User defined\nYour choice: ")
+ def create_words_dict():
+    choice = input("enter ur choice \n1.Basic\n2.Admin loopholes\n3.Sign in pages\n4.User defined\nYour choice: ")
 
-            if choice == '1':
-                words_dict = {"photos": None, "videos": None,"pictures": None, "files": None}
-            elif choice == '2':
-                words_dict = {"admin": None, "user": None,"sysadmin": None, "root": None}
-            elif choice == '3':
-                words_dict = {"login": None, "logout": None,"signin": None, "new": None}
-            elif choice == '4':
-                words_dict = {}
-                num_words = int(input("Enter the number of words you will input: "))  
-            for i in range(num_words):
-                input_string = input("Enter word #{}: ".format(i + 1))  
-                words_dict[input_string] = None  
-            else:
-                print("Invalid choice. Using predefined words by default.")
-            return words_dict,choice  # Returning the created dictionary
+    if choice == '1':
+        words_dict = {"photos": None, "videos": None,"pictures": None, "files": None}
 
-    def links1(words_dict):
-        print("\033[92m[+]checking ur words as sublinks on major sites...")
-        for word in words_dict:
-            username=word
-            instagram = f'https://www.instagram.com/{username}'
-            facebook = f'https://www.facebook.com/{username}'
-            twitter = f'https://www.twitter.com/{username}'
-            youtube = f'https://www.youtube.com/{username}'
-            blogger = f'https://{username}.blogspot.com'
-            google_plus = f'https://plus.google.com/s/{username}/top'
-            reddit = f'https://www.reddit.com/user/{username}'
-            wordpress = f'https://{username}.wordpress.com'
-            pinterest = f'https://www.pinterest.com/{username}'
-            github = f'https://www.github.com/{username}'
+    elif choice == '2':
+        words_dict = {"admin": None, "user": None,"sysadmin": None, "root": None}
 
-            WEBSITES = [instagram, facebook, twitter, youtube, blogger, google_plus, reddit,wordpress, pinterest, github]
+    elif choice == '3':
+        words_dict = {"login": None, "logout": None,"signin": None, "new": None}
 
-            def outer_func(colour):
-                def inner_function(msg):
-                    print(f'{colour}{msg}')
-                return inner_function
-
-
-            GREEN = outer_func('\033[92m')
-            YELLOW = outer_func('\033[93m')
-            RED = outer_func('\033[91m')
-
-            def search():
-                GREEN(f'[+] Searching for sublink:{username}')
-                time.sleep(0.5)
-                print('.......')
-                time.sleep(0.5)
-                print('.......\n')
-                time.sleep(0.5)
-
-                GREEN(f'[+] Webin 1.4.3 is working\n')
-                time.sleep(0.5)
-                print('.......')
-                time.sleep(0.5)
-                print('.......\n')
-                time.sleep(0.5)
-
-                time.sleep(1) 
-
-                count = 0
-                match = True
-                for url in WEBSITES:
-                    r = requests.get(url)
-
-                if r.status_code == 200:
-                    if match == True:
-                        GREEN('[+] FOUND MATCHES')
-                        match = False
-                    YELLOW(f'\n{url} - {r.status_code} - OK')
-                    if username in r.text:
-                        GREEN(f'POSITIVE MATCH: Username:{username} - text has been detected in url.')
-                    else:
-                        GREEN(f'POSITIVE MATCH: Username:{username} - \033[91mtext has NOT been detected in url, could be a FALSE POSITIVE.')#
-                    count += 1
-
-                total = len(WEBSITES)
-                GREEN(f'FINISHED: A total of {count} MATCHES found out of {total} websites.')
-
-            search()
-
-
-        print("finished printing")
-
-    def links2(words_dict,y):
-        print("\033[92m[+}Ur website is:"+y)
-        for word in words_dict:
-            username=word
-            mod_web = f'https://{y}/{username}'
-            WEBSITES = [mod_web]
-            def outer_func(colour):
-                def inner_function(msg):
-                    print(f'{colour}{msg}')
-                return inner_function
-
-
-            GREEN = outer_func('\033[92m')
-            YELLOW = outer_func('\033[93m')
-            RED = outer_func('\033[91m')
-
-            def search():
-                GREEN(f'[+] Searching for sublink:{username}')
-                time.sleep(0.5)
-                print('.......')
-                time.sleep(0.5)
-                print('.......\n')
-                time.sleep(0.5)
-
-                GREEN(f'[+] Webin 1.4.3 is working\n')
-                time.sleep(0.5)
-                print('.......')
-                time.sleep(0.5)
-                print('.......\n')
-                time.sleep(0.5)
-
-                time.sleep(1) 
-
-                count = 0
-                match = True
-                for url in WEBSITES:
-                    r = requests.get(url)
-
-                if r.status_code == 200:
-                    if match == True:
-                        GREEN('[+] FOUND MATCHES')
-                        match = False
-                    YELLOW(f'\n{url} - {r.status_code} - OK')
-                    if username in r.text:
-                        GREEN(f'POSITIVE MATCH: Username:{username} - text has been detected in url.')
-                    else:
-                        GREEN(f'POSITIVE MATCH: Username:{username} - \033[91mtext has NOT been detected in url, could be a FALSE POSITIVE.')#
-                    count += 1
-
-                total = len(WEBSITES)
-                GREEN(f'FINISHED: A total of {count} MATCHES found out of {total} websites.')
-
-            search()
-
-
-        print("finished printing")
-
-    def main():
-     # Call the create_words_dict() function to create the dictionary of words
-        words_dict,choice = create_words_dict()
+    elif choice == '4':
+        words_dict = {}
+        num_words = int(input("Enter the number of words you will input: "))  
+        for i in range(num_words):
+            input_string = input("Enter word #{}: ".format(i + 1))  
+            words_dict[input_string] = None  
     
-     # Print the words (keys) without None values
-        print("Block"+ choice+":", list(words_dict.keys()))
-        x=input("do want it for major websites or user based websites\n1.Major\n2.user based\nUr choice:")
-        if x=='1':
-            links1(words_dict)
-        elif x=='2':
-            y=input("enter ur website\n")
-            links2(words_dict,y)
-        else:
-            print("wrong input")
+    else:
+        print("Invalid choice. Using predefined words by default.")
+        
+    return words_dict,choice  # Returning the created dictionary
 
-    if __name__ == "__main__":
-         main()
+ def links1(words_dict):
+    print("\033[92m[+]checking ur words as sublinks on major sites...")
+    for word in words_dict:
+        username=word
+        instagram = f'https://www.instagram.com/{username}'
+        facebook = f'https://www.facebook.com/{username}'
+        twitter = f'https://www.twitter.com/{username}'
+        youtube = f'https://www.youtube.com/{username}'
+        blogger = f'https://{username}.blogspot.com'
+        google_plus = f'https://plus.google.com/s/{username}/top'
+        reddit = f'https://www.reddit.com/user/{username}'
+        wordpress = f'https://{username}.wordpress.com'
+        pinterest = f'https://www.pinterest.com/{username}'
+        github = f'https://www.github.com/{username}'
+
+        WEBSITES = [instagram, facebook, twitter, youtube, blogger, google_plus, reddit,wordpress, pinterest, github]
+
+        def outer_func(colour):
+            def inner_function(msg):
+                print(f'{colour}{msg}')
+            return inner_function
+
+
+        GREEN = outer_func('\033[92m')
+        YELLOW = outer_func('\033[93m')
+        RED = outer_func('\033[91m')
+
+        def search():
+            GREEN(f'[+] Searching for sublink:{username}')
+            time.sleep(0.5)
+            print('.......')
+            time.sleep(0.5)
+            print('.......\n')
+            time.sleep(0.5)
+
+            GREEN(f'[+] Webin 1.4.3 is working\n')
+            time.sleep(0.5)
+            print('.......')
+            time.sleep(0.5)
+            print('.......\n')
+            time.sleep(0.5)
+
+            time.sleep(1) 
+
+            count = 0
+            match = True
+            for url in WEBSITES:
+                r = requests.get(url)
+
+            if r.status_code == 200:
+                if match == True:
+                    GREEN('[+] FOUND MATCHES')
+                    match = False
+                YELLOW(f'\n{url} - {r.status_code} - OK')
+                if username in r.text:
+                    GREEN(f'POSITIVE MATCH: Username:{username} - text has been detected in url.')
+                else:
+                    GREEN(f'POSITIVE MATCH: Username:{username} - \033[91mtext has NOT been detected in url, could be a FALSE POSITIVE.')#
+                count += 1
+
+            total = len(WEBSITES)
+            GREEN(f'FINISHED: A total of {count} MATCHES found out of {total} websites.')
+
+        search()
+
+
+    print("finished printing")
+
+ def links2(words_dict,y):
+    print("\033[92m[+}Ur website is:"+y)
+    for word in words_dict:
+        username=word
+        mod_web = f'https://{y}/{username}'
+        WEBSITES = [mod_web]
+        def outer_func(colour):
+            def inner_function(msg):
+                print(f'{colour}{msg}')
+            return inner_function
+
+
+        GREEN = outer_func('\033[92m')
+        YELLOW = outer_func('\033[93m')
+        RED = outer_func('\033[91m')
+
+        def search():
+            GREEN(f'[+] Searching for sublink:{username}')
+            time.sleep(0.5)
+            print('.......')
+            time.sleep(0.5)
+            print('.......\n')
+            time.sleep(0.5)
+
+            GREEN(f'[+] Webin 1.4.3 is working\n')
+            time.sleep(0.5)
+            print('.......')
+            time.sleep(0.5)
+            print('.......\n')
+            time.sleep(0.5)
+
+            time.sleep(1) 
+
+            count = 0
+            match = True
+            for url in WEBSITES:
+                r = requests.get(url)
+
+            if r.status_code == 200:
+                if match == True:
+                    GREEN('[+] FOUND MATCHES')
+                    match = False
+                YELLOW(f'\n{url} - {r.status_code} - OK')
+                if username in r.text:
+                    GREEN(f'POSITIVE MATCH: Username:{username} - text has been detected in url.')
+                else:
+                    GREEN(f'POSITIVE MATCH: Username:{username} - \033[91mtext has NOT been detected in url, could be a FALSE POSITIVE.')#
+                count += 1
+
+            total = len(WEBSITES)
+            GREEN(f'FINISHED: A total of {count} MATCHES found out of {total} websites.')
+
+        search()
+
+
+    print("finished printing")
+
+ def main():
+    # Call the create_words_dict() function to create the dictionary of words
+    words_dict,choice = create_words_dict()
+    
+    # Print the words (keys) without None values
+    print("Block"+ choice+":", list(words_dict.keys()))
+    x=input("do want it for major websites or user based websites\n1.Major\n2.user based")
+    if x=='1':
+        links1(words_dict)
+    elif x=='2':
+        y=input("enter ur website")
+        links2(words_dict,y)
+    else:
+        print("wrong input")
+
+ if __name__ == "__main__":
+    main()
 
 
  
